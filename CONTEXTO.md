@@ -26,5 +26,8 @@ O CTA de cada perfil aponta sempre para a mesma coisa: os 20 minutos da "convers
 
 ## Por fazer
 
-- Substituir `[LINK_A_DEFINIR]` no `index.html` pelo link real do evento/call
 - Confirmar com a Sandra se os 4 perfis e os 3 próximos passos de cada um soam a ela em voz alta
+
+## CTA final
+
+Liga a uma página de marcações do Google Calendar (call de diagnóstico, 20 minutos): `https://calendar.app.google/mUdCfgDaiA9aCvER6`
