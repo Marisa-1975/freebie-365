@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Teste da Letra Pequena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ameixa: #2C1F4D;
+  --papel-fundo: #3F3266;
+  --vinho: #C1596F;
+  --vinho-dim: rgba(193,89,111,0.35);
+  --papel: #FAF8F5;
+  --muted: rgba(250,248,245,0.62);
+  --border: rgba(250,248,245,0.14);
+  --serif: 'IBM Plex Serif', Georgia, serif;
+  --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ameixa);color:var(--papel);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+body{position:relative;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 22% 15%, rgba(193,89,111,0.10), transparent 55%);
+}
+
+.wrap{max-width:720px;margin:0 auto;padding:96px 32px 140px;position:relative;z-index:1}
+@media(max-width:640px){.wrap{padding:56px 22px 96px}}
+
+[hidden]{display:none!important}
+
+.eyebrow{
+  font-size:12px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--vinho);font-weight:500;margin-bottom:28px;
+}
+h1.hero{
+  font-family:var(--serif);font-weight:500;
+  font-size:clamp(32px, 6vw, 52px);line-height:1.12;letter-spacing:0.005em;
+  margin-bottom:24px;color:var(--papel);
+}
+h1.hero em{font-style:italic;color:var(--vinho);font-weight:500}
+p.lead{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(18px, 2.3vw, 22px);line-height:1.5;
+  color:var(--muted);margin-bottom:48px;max-width:580px;
+}
+
+.btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--papel);color:var(--ameixa);
+  padding:18px 32px;border-radius:6px;border:none;cursor:pointer;
+  font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0.01em;
+  transition:background 200ms var(--ease), transform 200ms var(--ease), color 200ms var(--ease);
+  text-decoration:none;
+}
+.btn:hover{background:var(--vinho);color:var(--papel);transform:translateY(-1px)}
+.btn .arrow{transition:transform 200ms var(--ease)}
+.btn:hover .arrow{transform:translateX(4px)}
+.btn-outline{background:transparent;color:var(--papel);border:1.5px solid var(--border)}
+.btn-outline:hover{background:var(--papel);color:var(--ameixa)}
+
+/* progress bar */
+.progress-track{
+  position:sticky;top:0;left:0;right:0;height:3px;background:var(--border);z-index:5;
+  margin-bottom:64px;
+}
+.progress-fill{height:100%;background:var(--vinho);width:0%;transition:width 400ms var(--ease)}
+
+.q-counter{
+  font-family:var(--mono);font-size:12px;letter-spacing:0.08em;
+  color:var(--muted);margin-bottom:18px;
+}
+
+.q-block{opacity:1;transition:opacity 260ms var(--ease)}
+.q-block.is-leaving{opacity:0}
+
+h2.question{
+  font-family:var(--serif);font-weight:500;font-size:clamp(22px,3.4vw,30px);
+  line-height:1.3;margin-bottom:32px;color:var(--papel);
+}
+
+.option-card{
+  display:flex;align-items:center;gap:18px;
+  background:var(--papel-fundo);border:1.5px solid var(--border);border-radius:6px;
+  padding:20px 24px;margin-bottom:14px;cursor:pointer;
+  transition:border-color 200ms var(--ease), transform 200ms var(--ease);
+}
+.option-card:hover{border-color:var(--vinho);transform:translateX(3px)}
+.option-num{
+  font-family:var(--serif);font-size:19px;font-weight:600;color:var(--vinho);
+  min-width:26px;flex:0 0 auto;
+}
+.option-text{font-family:var(--serif);font-size:17px;line-height:1.5;color:var(--papel);flex:1}
+.option-arrow{opacity:0;transition:opacity 200ms var(--ease);color:var(--vinho);flex:0 0 auto}
+.option-card:hover .option-arrow{opacity:1}
+
+/* result */
+.output{margin-top:8px;display:flex;flex-direction:column;gap:14px}
+.output-card{
+  background:var(--papel-fundo);border:1px solid var(--border);border-radius:8px;
+  padding:24px 28px;display:flex;gap:20px;align-items:flex-start;
+  opacity:0;transform:translateY(16px);
+  animation:reveal 500ms var(--ease) forwards;
+}
+.output-card:nth-child(1){animation-delay:80ms}
+.output-card:nth-child(2){animation-delay:200ms}
+.output-card:nth-child(3){animation-delay:320ms}
+.output-num{
+  flex:0 0 auto;font-family:var(--serif);font-size:22px;font-weight:600;
+  color:var(--vinho);letter-spacing:0.02em;min-width:32px;
+}
+.output-body h3{
+  font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:6px;color:var(--papel);
+}
+.output-body p{font-size:14.5px;color:var(--muted);line-height:1.55}
+@keyframes reveal{to{opacity:1;transform:translateY(0)}}
+
+#result-screen{opacity:0;transform:translateY(12px);transition:opacity 500ms var(--ease), transform 500ms var(--ease)}
+#result-screen.is-visible{opacity:1;transform:translateY(0)}
+
+.foot{
+  margin-top:88px;padding-top:48px;border-top:1px solid var(--border);
+}
+.foot-label{font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--vinho);margin-bottom:16px}
+.foot-body{font-family:var(--serif);font-size:19px;line-height:1.5;color:var(--muted);margin-bottom:24px;max-width:520px}
+
+.restart-link{
+  display:inline-block;margin-top:28px;font-size:13px;color:var(--muted);
+  text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+}
+.restart-link:hover{color:var(--papel)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- START -->
+  <section id="start-screen">
+    <div class="eyebrow">O Teste da Letra Pequena</div>
+    <h1 class="hero">Achas mesmo que está <em>tudo</em> coberto?</h1>
+    <p class="lead">5 perguntas. Dois minutos. Talvez uma surpresa que vale mais a pena teres agora do que no dia mau.</p>
+    <button class="btn" id="start-btn">Começar o quiz <span class="arrow">→</span></button>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz-screen" hidden>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="q-counter" id="q-counter">PERGUNTA 1 / 5</div>
+    <div class="q-block" id="q-block">
+      <h2 class="question" id="q-text"></h2>
+      <div id="q-options"></div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result-screen" hidden>
+    <div class="eyebrow">O teu perfil</div>
+    <h1 class="hero" id="r-title"></h1>
+    <p class="lead" id="r-desc"></p>
+
+    <div class="output" id="r-output"></div>
+
+    <footer class="foot">
+      <div class="foot-label">Próximo passo</div>
+      <p class="foot-body" id="r-cta-text">Isto é só o primeiro filtro. Para saberes ao certo o que tens, o que falta e o que sobra, a conversa é o passo a seguir — vinte minutos, sem venda.</p>
+      <a class="btn btn-outline" href="[LINK_A_DEFINIR]">Marcar os meus 20 minutos <span class="arrow">→</span></a>
+    </footer>
+
+    <span class="restart-link" id="restart-btn">Fazer o teste outra vez</span>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'letra-pequena-respostas';
+
+  var questions = [
+    {
+      text: "Há quanto tempo não lês as tuas apólices de início ao fim?",
+      options: [
+        { text: "Nunca as li — confio em quem mas vendeu", profile: "confia" },
+        { text: "Todos os anos, à procura de preço melhor", profile: "preco" },
+        { text: "Só depois de um problema me obrigar", profile: "susto" },
+        { text: "Nem sei ao certo onde estão", profile: "nunca" }
+      ]
+    },
+    {
+      text: "Já tiveste um sinistro ou uma recusa?",
+      options: [
+        { text: "Não, nunca precisei de testar nada", profile: "nunca" },
+        { text: "Não, mas mudo sempre que aparece mais barato", profile: "preco" },
+        { text: "Sim — e a cobertura foi menor do que pensava", profile: "susto" },
+        { text: "Confio que sim, mas nunca verifiquei", profile: "confia" }
+      ]
+    },
+    {
+      text: "Quem escolheu os seguros que tens hoje?",
+      options: [
+        { text: "Quem mos vendeu na altura, e ficou assim", profile: "confia" },
+        { text: "Eu, sempre a comparar preços", profile: "preco" },
+        { text: "Estou a corrigir depois de um erro que descobri", profile: "susto" },
+        { text: "Ninguém — ainda não organizei nada a sério", profile: "nunca" }
+      ]
+    },
+    {
+      text: "Se te perguntasse \"o que cobre exactamente este seguro\", conseguias responder sem ir ver?",
+      options: [
+        { text: "Achava que sim, mas se calhar não", profile: "confia" },
+        { text: "Sim ao preço, não às coberturas", profile: "preco" },
+        { text: "Já aprendi da pior maneira que não", profile: "susto" },
+        { text: "Nem saberia por onde procurar", profile: "nunca" }
+      ]
+    },
+    {
+      text: "O que mais se parece contigo?",
+      options: [
+        { text: "“Isso está tudo coberto” — foi o que me disseram", profile: "confia" },
+        { text: "“Consegui este mais barato” — é o que me orgulha", profile: "preco" },
+        { text: "“Já me aconteceu uma vez, não quero que aconteça outra”", profile: "susto" },
+        { text: "“Depois eu vejo isso com calma”", profile: "nunca" }
+      ]
+    }
+  ];
+
+  var profiles = {
+    confia: {
+      title: "És A Que Confia de Mais",
+      desc: "Assinaste, arrumaste a pasta, e nunca mais abriste. Ouviste “está tudo coberto” e acreditaste — porque quem te vendeu parecia saber do que falava. Se calhar sabia. Se calhar só parecia.",
+      steps: [
+        { title: "Abre a pasta", text: "Antes de te preocupares, vê o que lá está escrito. Não precisas de perceber tudo — só de o teres à frente." },
+        { title: "Escreve as perguntas que nunca fizeste", text: "“Isto cobre X?” é sempre melhor pergunta do que “está tudo bem, certo?”" },
+        { title: "Marca 20 minutos", text: "Uma conversa sem venda chega para saberes se o que tens é o que precisas." }
+      ]
+    },
+    preco: {
+      title: "És A Que Só Olha o Preço",
+      desc: "Mudaste de seguradora tantas vezes quanto de fornecedor de internet — sempre pela mesma razão. Ficaste com o número mais baixo. Nunca perguntaste o que ficou de fora para ele ser mais baixo.",
+      steps: [
+        { title: "Compara coberturas, não só o total", text: "O preço mais baixo tem sempre uma explicação: o que corta." },
+        { title: "Pede a lista do que não cobre", text: "Tão importante como a lista do que cobre — e quase ninguém pede." },
+        { title: "Marca 20 minutos", text: "Antes da próxima renovação, para veres se poupaste a sério ou só adiaste a conta." }
+      ]
+    },
+    susto: {
+      title: "És A Que Já Levou um Susto",
+      desc: "Já aconteceu. A cobertura que achavas que tinhas, afinal não tinha o mesmo tamanho. Corrigiste essa. As outras continuam por verificar.",
+      steps: [
+        { title: "Não pares na que doeu", text: "Se uma apólice tinha um buraco, as outras podem ter outro." },
+        { title: "Lê tudo de uma vez", text: "Não uma de cada vez que dói — todas juntas, ao mesmo tempo." },
+        { title: "Marca 20 minutos", text: "Trago as apólices todas para a mesma mesa e digo o que falta." }
+      ]
+    },
+    nunca: {
+      title: "És A Que Nunca Testou",
+      desc: "Nunca tiveste um sinistro. Achas que isso quer dizer que estás bem protegida. Quer dizer só que ainda não sabes.",
+      steps: [
+        { title: "Não esperes pelo teste", text: "Descobrir no dia mau é a pior altura para descobrir." },
+        { title: "Organiza o que já tens", text: "Nem que seja só para saberes, ao certo, o que realmente tens." },
+        { title: "Marca 20 minutos", text: "Antes de precisares. Não depois." }
+      ]
+    }
+  };
+
+  var current = 0;
+  var answers = [];
+
+  var startScreen = document.getElementById('start-screen');
+  var quizScreen = document.getElementById('quiz-screen');
+  var resultScreen = document.getElementById('result-screen');
+  var qBlock = document.getElementById('q-block');
+  var qText = document.getElementById('q-text');
+  var qOptions = document.getElementById('q-options');
+  var qCounter = document.getElementById('q-counter');
+  var progressFill = document.getElementById('progress-fill');
+
+  document.getElementById('start-btn').addEventListener('click', function(){
+    startScreen.hidden = true;
+    quizScreen.hidden = false;
+    renderQuestion();
+  });
+
+  document.getElementById('restart-btn').addEventListener('click', function(){
+    current = 0;
+    answers = [];
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    resultScreen.classList.remove('is-visible');
+    resultScreen.hidden = true;
+    quizScreen.hidden = false;
+    renderQuestion();
+  });
+
+  function renderQuestion(){
+    var q = questions[current];
+    qCounter.textContent = 'PERGUNTA ' + (current + 1) + ' / ' + questions.length;
+    progressFill.style.width = ((current) / questions.length * 100) + '%';
+    qText.textContent = q.text;
+    qOptions.innerHTML = '';
+    q.options.forEach(function(opt, idx){
+      var card = document.createElement('div');
+      card.className = 'option-card';
+      card.innerHTML = '<span class="option-num">' + (idx + 1) + '</span>' +
+                        '<span class="option-text">' + opt.text + '</span>' +
+                        '<span class="option-arrow">→</span>';
+      card.addEventListener('click', function(){ selectOption(opt.profile); });
+      qOptions.appendChild(card);
+    });
+  }
+
+  function selectOption(profile){
+    answers.push(profile);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(answers)); } catch(e){}
+
+    qBlock.classList.add('is-leaving');
+    setTimeout(function(){
+      current++;
+      if (current < questions.length){
+        renderQuestion();
+        qBlock.classList.remove('is-leaving');
+      } else {
+        progressFill.style.width = '100%';
+        showResult();
+      }
+    }, 260);
+  }
+
+  function showResult(){
+    var counts = { confia: 0, preco: 0, susto: 0, nunca: 0 };
+    answers.forEach(function(p){ counts[p]++; });
+
+    var order = ['confia','preco','susto','nunca'];
+    var winner = order[0];
+    order.forEach(function(key){
+      if (counts[key] > counts[winner]) winner = key;
+    });
+
+    var profile = profiles[winner];
+    document.getElementById('r-title').textContent = profile.title;
+    document.getElementById('r-desc').textContent = profile.desc;
+
+    var out = document.getElementById('r-output');
+    out.innerHTML = '';
+    profile.steps.forEach(function(step, idx){
+      var card = document.createElement('div');
+      card.className = 'output-card';
+      card.innerHTML = '<span class="output-num">' + (idx + 1) + '</span>' +
+        '<div class="output-body"><h3>' + step.title + '</h3><p>' + step.text + '</p></div>';
+      out.appendChild(card);
+    });
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: answers, resultado: winner }));
+    } catch(e){}
+
+    quizScreen.hidden = true;
+    resultScreen.hidden = false;
+    requestAnimationFrame(function(){
+      resultScreen.classList.add('is-visible');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
